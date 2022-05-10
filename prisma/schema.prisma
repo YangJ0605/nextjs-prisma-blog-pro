@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgres"
+  url      = "postgres://blog:cc1234@1.12.232.127:5432/blog_development"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique @map("user_name")
+  password  String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+
+  post   Post[]
+  coment coment[]
+
+
+  @@map("users")
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String   @default("") @db.VarChar(255)
+  content   String   @default("") @db.Text
+  author    User?    @relation(fields: [authorId], references: [id])
+  authorId  Int?     @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  coment    coment[]
+
+  @@map("posts")
+}
+
+model coment {
+  id        Int      @id @default(autoincrement())
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    Int      @map("user_id")
+  post      Post?    @relation(fields: [postId], references: [id])
+  postId    Int      @map("post_id")
+  content   String   @default("") @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("coments")
+}
