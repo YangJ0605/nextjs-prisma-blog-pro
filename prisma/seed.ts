@@ -4,11 +4,11 @@ const prisma = new PrismaClient()
 
 const userData: Prisma.UserCreateInput[] = [
   {
-    username: 'cc7',
+    username: 'zhangsan',
     password: '123456'
   },
   {
-    username: 'admin4',
+    username: 'lisi',
     password: '123456'
   }
 ]
@@ -20,12 +20,22 @@ async function main() {
       data: u
     })
     console.log(user)
-    await prisma.post.create({
+    const post = await prisma.post.create({
       data: {
-        title: `post ${u.username}`,
-        content: `content ${u.username}`
+        title: `${u.username}的文章`,
+        content: `${u.username}的文章内容`,
+        authorId: user.id
       }
     })
+
+    await prisma.comment.create({
+      data: {
+        userId: user.id,
+        postId: post.id,
+        content: '牛逼！！！'
+      }
+    })
+
     console.log(`Created user with id: ${user.id}`)
   }
   console.log(`Seeding finished.`)
