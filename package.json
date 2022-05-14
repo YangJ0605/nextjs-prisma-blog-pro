@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "m:db": "prisma migrate dev --name"
+    "m:db": "prisma migrate dev --name",
+    "m:dev": "dotenv -e .env -- npx prisma migrate dev --name useEnvFile"
   },
   "dependencies": {
     "@prisma/client": "^3.13.0",
@@ -19,6 +20,7 @@
     "@types/node": "17.0.31",
     "@types/react": "18.0.9",
     "@types/react-dom": "18.0.3",
+    "dotenv-cli": "^5.1.0",
     "eslint": "8.15.0",
     "eslint-config-next": "12.1.6",
     "prisma": "^3.13.0",

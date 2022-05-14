@@ -1,14 +1,16 @@
 import { PrismaClient, Prisma } from '@prisma/client'
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient({
+  log: ['query', 'info', 'warn', 'error']
+})
 
 const userData: Prisma.UserCreateInput[] = [
   {
-    username: 'zhangsan',
+    username: '安其拉',
     password: '123456'
   },
   {
-    username: 'lisi',
+    username: '虞姬',
     password: '123456'
   }
 ]
