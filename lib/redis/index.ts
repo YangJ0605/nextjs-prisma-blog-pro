@@ -7,15 +7,16 @@ if (process.env.NODE_ENV === 'production') {
     url: process.env.REDIS_URL,
     password: process.env.REDIS_PASS
   })
+  redisClient.connect()
 } else {
   if (!global.redisClient) {
     global.redisClient = createClient({
       url: process.env.REDIS_URL,
       password: process.env.REDIS_PASS
     })
+    global.redisClient.connect()
   }
   redisClient = global.redisClient
 }
 
-redisClient.connect()
 export default redisClient

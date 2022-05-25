@@ -42,7 +42,7 @@ export const sendCodeToMail = async ({
   try {
     await transporter.sendMail(options)
     await redisClient.set(email, code)
-    await redisClient.expire(email, 5)
+    await redisClient.expire(email, 60 * 5)
   } catch (error) {
     console.log('验证码发送失败', error)
   }
