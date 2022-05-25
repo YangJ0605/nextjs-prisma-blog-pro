@@ -8,16 +8,13 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique @map("user_name")
+  id        Int       @id @default(autoincrement())
+  username  String    @unique @map("user_name")
   password  String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
-
-
-  post    Post[]
-  comment comment[]
-
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at")
+  comment   comment[]
+  post      Post[]
 
   @@map("users")
 }
@@ -25,11 +22,11 @@ model User {
 model Post {
   id        Int       @id @default(autoincrement())
   title     String    @default("") @db.VarChar(255)
-  content   String    @default("") @db.Text
-  author    User?     @relation(fields: [authorId], references: [id])
+  content   String    @default("")
   authorId  Int?      @map("user_id")
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt DateTime  @default(now()) @updatedAt @map("updated_at")
+  author    User?     @relation(fields: [authorId], references: [id])
   comment   comment[]
 
   @@map("posts")
@@ -37,13 +34,13 @@ model Post {
 
 model comment {
   id        Int      @id @default(autoincrement())
-  user      User?    @relation(fields: [userId], references: [id])
   userId    Int      @map("user_id")
-  post      Post?    @relation(fields: [postId], references: [id])
   postId    Int      @map("post_id")
-  content   String   @default("") @db.Text
+  content   String   @default("")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  post      Post     @relation(fields: [postId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 
   @@map("comments")
 }
