@@ -4,7 +4,13 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
 const Home: NextPage = () => {
-  return <div className={styles.container}>home</div>
+  return (
+    <div className='theme-dark bg-base'>
+      <h1 className='text-3xl font-bold underline pl-48px text-primary'>
+        Hello world!
+      </h1>
+    </div>
+  )
 }
 
 export default Home
