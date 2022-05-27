@@ -7,4 +7,4 @@ Content-Type: application/json
 }
 
 ###
-GET  http://localhost:3000/api/v1/getcode?email=jieyang@deeproute.ai
+GET  http://localhost:3000/api/v1/getcode?email=qingchanghuang@deeproute.ai

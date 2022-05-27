@@ -12,7 +12,8 @@ const register: NextApiHandler = async (req, res) => {
     const { hasError, errMsg } = await validateUser({ username, password })
     if (hasError) {
       res.status(400).json({
-        errMsg
+        msg: errMsg,
+        code: -1
       })
       return
     }
