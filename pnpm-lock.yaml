@@ -11,6 +11,7 @@ specifiers:
   eslint: 8.15.0
   eslint-config-next: 12.1.6
   next: 12.1.6
+  next-themes: ^0.2.0
   nodemailer: ^6.7.5
   postcss: ^8.4.14
   prisma: ^3.13.0
@@ -24,6 +25,7 @@ specifiers:
 dependencies:
   '@prisma/client': 3.13.0_prisma@3.13.0
   next: 12.1.6_react-dom@18.1.0+react@18.1.0
+  next-themes: 0.2.0_d30c2367b03c877b70a67c330200ac54
   nodemailer: 6.7.5
   react: 18.1.0
   react-dom: 18.1.0_react@18.1.0
@@ -1603,6 +1605,18 @@ packages:
   /natural-compare/1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
     dev: true
+
+  /next-themes/0.2.0_d30c2367b03c877b70a67c330200ac54:
+    resolution: {integrity: sha512-myhpDL4vadBD9YDSHiewqvzorGzB03N84e+3LxCwHRlM/hiBOaW+UsKsQojQAzC7fdcJA0l2ppveXcYaVV+hxQ==}
+    peerDependencies:
+      next: '*'
+      react: '*'
+      react-dom: '*'
+    dependencies:
+      next: 12.1.6_react-dom@18.1.0+react@18.1.0
+      react: 18.1.0
+      react-dom: 18.1.0_react@18.1.0
+    dev: false
 
   /next/12.1.6_react-dom@18.1.0+react@18.1.0:
     resolution: {integrity: sha512-cebwKxL3/DhNKfg9tPZDQmbRKjueqykHHbgaoG4VBRH3AHQJ2HO0dbKFiS1hPhe1/qgc2d/hFeadsbPicmLD+A==}

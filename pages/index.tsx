@@ -1,14 +1,11 @@
+import Button from '@/components/Button'
 import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import { useTheme } from 'next-themes'
 
 const Home: NextPage = () => {
   return (
-    <div className='theme-dark bg-base'>
-      <h1 className='text-3xl font-bold underline pl-48px text-primary'>
-        Hello world!
-      </h1>
+    <div>
+      <Button />
     </div>
   )
 }
