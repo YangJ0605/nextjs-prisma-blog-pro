@@ -1,0 +1,3 @@
+function initModalContainer() {}
+
+export default {}

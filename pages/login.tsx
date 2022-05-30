@@ -1,74 +1,53 @@
+import Form from '@/components/Form'
+import { FiledItem } from '@/components/Form/FormItem'
 import type { NextPage } from 'next'
-import React from 'react'
+import Link from 'next/link'
+import React, { useRef } from 'react'
 
 const Login: NextPage = () => {
+  const formRef = useRef<HTMLFormElement>(null)
+
+  const handleSubmit = (v: Record<string, string | number>) => {
+    console.log(v)
+  }
+
+  const fileds: FiledItem[] = [
+    {
+      label: '邮箱',
+      name: 'email',
+      required: true,
+      type: 'email'
+    },
+    {
+      label: '密码',
+      name: 'password',
+      required: true,
+      type: 'password'
+    }
+  ]
+
   return (
-    <div className='pt-[160px]'>
-      <div className='flex  flex-col m-auto justify-center max-w-md   rounded-md sm:p-10 bg-gray-50 text-gray-800  dark:bg-gray-900 dark:text-gray-100'>
-        <div className='mb-8 text-center'>
-          <h1 className='my-3 text-4xl font-bold'>登录</h1>
-        </div>
-        <form
-          noValidate={false}
-          action=''
-          className='space-y-12 ng-untouched ng-pristine ng-valid'
-        >
-          <div className='space-y-4'>
-            <div>
-              <label htmlFor='email' className='block mb-2 text-sm'>
-                邮箱
-              </label>
-              <input
-                type='email'
-                name='email'
-                id='email'
-                placeholder='xxx.qq.com'
-                className='w-full px-3 py-2 border rounded-md border-gray-300 bg-gray-50 text-gray-800 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100'
-              />
-            </div>
-            <div>
-              <div className='flex justify-between mb-2'>
-                <label htmlFor='password' className='text-sm'>
-                  密码
-                </label>
-                <a
-                  rel='noopener noreferrer'
-                  href='#'
-                  className='text-xs hover:underline text-gray-600 dark:text-gray-400'
-                >
-                  忘记密码?
-                </a>
-              </div>
-              <input
-                type='password'
-                name='password'
-                id='password'
-                placeholder='*****'
-                className='w-full px-3 py-2 border rounded-md border-gray-300 bg-gray-50 text-gray-80 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100'
-              />
-            </div>
-          </div>
-          <div className='space-y-2'>
-            <div>
-              <button
-                type='button'
-                className='w-full px-8 py-3 font-semibold rounded-md bg-purple-600 text-gray-50 dark:bg-purple-400 dark:text-gray-900'
-              >
-                登录
-              </button>
-            </div>
-            <p className='px-6 text-sm text-center text-gray-600 dark:text-gray-400'>
-              没有账号?
-              <a
-                rel='noopener noreferrer'
-                href='#'
-                className='hover:underline dark:text-purple-400 text-purple-600'
-              >
-                注册
-              </a>
-            </p>
-          </div>
-        </form>
+    <div className='w-full h-full flex items-center justify-center'>
+      <div className='w-full max-w-sm p-6 m-auto bg-white rounded-md shadow-md dark:bg-gray-800'>
+        <h1 className='text-3xl font-semibold text-center text-gray-700 dark:text-white'>
+          登录
+        </h1>
+
+        <Form
+          formRef={formRef}
+          fileds={fileds}
+          submitText='登录'
+          onSubmit={handleSubmit}
+        ></Form>
+
+        <p className='mt-8 text-xs font-light text-center text-gray-400'>
+          还没账号？
+          <Link href='/register'>
+            <a className='font-medium text-gray-700 dark:text-gray-200 hover:underline'>
+              创建一个
+            </a>
+          </Link>
+        </p>
       </div>
     </div>
   )
