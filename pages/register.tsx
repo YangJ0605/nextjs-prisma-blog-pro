@@ -3,7 +3,8 @@ import { FiledItem } from '@/components/Form/FormItem'
 import type { NextPage } from 'next'
 import Link from 'next/link'
 import React, { useRef, useState } from 'react'
-import axios from 'axios'
+
+import $message from '@/components/message'
 
 const Login: NextPage = () => {
   const formRef = useRef<HTMLFormElement>(null)
@@ -13,6 +14,7 @@ const Login: NextPage = () => {
   }
 
   const getCode = () => {
+    $message.success('success')
     const { email } = formRef.current?.value as Record<string, string>
     if (!email) return
     // axios.get('/api/getCode').then(res => {})
