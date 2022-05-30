@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useState } from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import Success from './success'
 
 function initModalContainer() {
@@ -10,8 +10,8 @@ function initModalContainer() {
     container.id = 'message-container'
     document.body.appendChild(container)
     ele = document.getElementById('message-container')
-
-    ReactDOM.render(<MessageContainer />, ele)
+    const root = createRoot(container!)
+    root.render(<MessageContainer />)
   }
 }
 initModalContainer()
