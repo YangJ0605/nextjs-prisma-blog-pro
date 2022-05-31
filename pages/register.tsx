@@ -3,25 +3,47 @@ import { FiledItem } from '@/components/Form/FormItem'
 import type { NextPage } from 'next'
 import Link from 'next/link'
 import React, { useRef, useState } from 'react'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 
 import $message from '@/components/message'
+import { emailRegexp } from '@/lib/regexp'
+import { useRouter } from 'next/router'
 
 const Login: NextPage = () => {
   const formRef = useRef<HTMLFormElement>(null)
+  const router = useRouter()
 
-  const handleSubmit = (v: Record<string, string | number>) => {
-    console.log(v)
+  const handleSubmit = async (v: Record<string, string | number>) => {
+    const { email, password, code } = v
+
+    const { data } = await axios.post('/api/v1/register', {
+      username: email,
+      password,
+      code
+    })
+    if (data.code === 0) {
+      $message.success('注册成功')
+      router.push('/login')
+    } else {
+      $message.error(data.msg)
+    }
   }
 
   const getCode = () => {
     const { email } = formRef.current?.value as Record<string, string>
-    if (!email) return
-    axios.get(`/api/v1/getcode?email=${email}`).then(res => {
-      if (res.code !== 0) {
-        $message.warning(res.msg)
+    if (!email) {
+      $message.warning('邮箱不能为空')
+      return
+    }
+    if (!emailRegexp.test(email)) {
+      $message.warning('邮箱格式错误')
+      return
+    }
+    axios.get(`/api/v1/getcode?email=${email}`).then(({ data }) => {
+      if (data.code !== 0) {
+        $message.warning(data.msg)
       } else {
-        $message.success(res.msg)
+        $message.success(data.msg)
       }
     })
   }

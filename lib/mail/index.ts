@@ -36,14 +36,10 @@ export const sendCodeToMail = async ({
     from: '"cc👻" < ' + process.env.EMAIL + ' >',
     to: email,
     subject: '验证码',
-    html: `<h2>您好</2>， <p>您的邮箱验证码为${code}，五分钟有效。</p>`
+    html: `<h2>您好</h2>， <p>您的邮箱验证码为${code}，五分钟有效。</p>`
   }
 
-  try {
-    await transporter.sendMail(options)
-    await redisClient.set(email, code)
-    await redisClient.expire(email, 60 * 5)
-  } catch (error) {
-    console.log('验证码发送失败', error)
-  }
+  await transporter.sendMail(options)
+  await redisClient.set(email, code)
+  await redisClient.expire(email, 60 * 5)
 }

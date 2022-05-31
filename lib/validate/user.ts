@@ -1,5 +1,6 @@
 import { User } from '@prisma/client'
 import prisma from '../prisma'
+import { emailRegexp } from '../regexp'
 
 export const validateUser = async (
   user: Pick<User, 'username' | 'password'>
@@ -8,7 +9,15 @@ export const validateUser = async (
     errMsg = ''
   if (!user.username) {
     hasError = true
-    errMsg = '用户名不能为空'
+    errMsg = '邮箱不能为空'
+    return {
+      hasError,
+      errMsg
+    }
+  }
+  if (!emailRegexp.test(user.username)) {
+    hasError = true
+    errMsg = '邮箱格式错误'
     return {
       hasError,
       errMsg
@@ -46,7 +55,7 @@ export const validateUser = async (
 
   if (sqlUser) {
     hasError = true
-    errMsg = '用户名已存在'
+    errMsg = '该邮箱已注册'
     return {
       hasError,
       errMsg

@@ -1,5 +1,8 @@
 import Form from '@/components/Form'
 import { FiledItem } from '@/components/Form/FormItem'
+import $message from '@/components/message'
+import { emailRegexp, passwordRegexp } from '@/lib/regexp'
+import axios from 'axios'
 import type { NextPage } from 'next'
 import Link from 'next/link'
 import React, { useRef } from 'react'
@@ -7,8 +10,35 @@ import React, { useRef } from 'react'
 const Login: NextPage = () => {
   const formRef = useRef<HTMLFormElement>(null)
 
-  const handleSubmit = (v: Record<string, string | number>) => {
-    console.log(v)
+  const handleSubmit = async (v: Record<string, string | number>) => {
+    const { email, password } = v
+    if (!email) {
+      $message.warning('邮箱不能为空')
+      return
+    }
+    if (!emailRegexp.test(email as string)) {
+      $message.warning('邮箱格式错误')
+      return
+    }
+    if (!password) {
+      $message.warning('密码不能为空')
+      return
+    }
+    if (!passwordRegexp.test(password as string)) {
+      $message.warning(
+        '密码格式错误（以字母开头，长度在6~18之间，只能包含字母、数字和下划线'
+      )
+      return
+    }
+    const { data } = await axios.post('/api/v1/login', {
+      username: email,
+      password
+    })
+    if (data.code === 0) {
+      $message.success('登录成功!')
+    } else {
+      $message.error(data.msg)
+    }
   }
 
   const fileds: FiledItem[] = [

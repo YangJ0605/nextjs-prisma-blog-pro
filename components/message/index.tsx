@@ -57,13 +57,9 @@ function MessageContainer() {
     return l.id
   }
 
-  console.log(messageList)
-
   removeChild = async (id: string) => {
     await sleep(1500)
-    console.log('messageList', copyMessageListRef.current, id)
-    const m = messageList.find(l => l.id === id)
-    console.log('mmmm', m)
+    const m = copyMessageListRef.current.find(l => l.id === id)
     if (!m) return
     setActiveIds(preActiveIds => preActiveIds.filter(i => i !== id))
     await sleep(m.duration || 500)
@@ -71,19 +67,12 @@ function MessageContainer() {
     return undefined
   }
 
-  // useEffect(() => {
-  //   if (messageList.length > 10) {
-  //     const { id } = messageList.shift()!
-  //     setMessageList(preList => preList.filter(l => l.id !== id))
-  //   }
-  // }, [messageList])
-
   useEffect(() => {
     copyMessageListRef.current = messageList
   })
 
   return (
-    <div className='fixed top-0 left-0 flex flex-col w-screen z-5000'>
+    <div className='fixed top-[80px] left-0 flex flex-col w-screen z-5000'>
       {messageList.map(item => (
         <Message
           type={item.type}

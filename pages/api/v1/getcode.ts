@@ -8,6 +8,7 @@ const getCode: NextApiHandler = async (req, res) => {
     const { email } = req.query as {
       email?: string
     }
+
     if (!email)
       return res.json({
         code: -1,
@@ -21,14 +22,21 @@ const getCode: NextApiHandler = async (req, res) => {
       })
     }
     const code = generateCode()
-    await sendCodeToMail({
-      code,
-      email
-    })
-    res.json({
-      msg: '发送成功!',
-      code: 0
-    })
+    try {
+      await sendCodeToMail({
+        code,
+        email
+      })
+      res.json({
+        msg: '发送成功!',
+        code: 0
+      })
+    } catch (error) {
+      res.status(400).json({
+        code: -1,
+        msg: error
+      })
+    }
   } else {
     res.status(422).json({
       code: -1,
