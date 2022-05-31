@@ -3,6 +3,7 @@ import { FiledItem } from '@/components/Form/FormItem'
 import type { NextPage } from 'next'
 import Link from 'next/link'
 import React, { useRef, useState } from 'react'
+import axios from 'axios'
 
 import $message from '@/components/message'
 
@@ -14,10 +15,15 @@ const Login: NextPage = () => {
   }
 
   const getCode = () => {
-    $message.success('获取验证码成功')
     const { email } = formRef.current?.value as Record<string, string>
     if (!email) return
-    // axios.get('/api/getCode').then(res => {})
+    axios.get(`/api/v1/getcode?email=${email}`).then(res => {
+      if (res.code !== 0) {
+        $message.warning(res.msg)
+      } else {
+        $message.success(res.msg)
+      }
+    })
   }
 
   const fileds: FiledItem[] = [

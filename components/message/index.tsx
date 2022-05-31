@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import ErrorMessage from './error'
 import InfoMessage from './info'
@@ -49,6 +49,7 @@ let removeChild: (id: string) => Promise<undefined>
 function MessageContainer() {
   const [messageList, setMessageList] = useState<Omit<IMessage, 'show'>[]>([])
   const [activeIds, setActiveIds] = useState<string[]>([])
+  const copyMessageListRef = useRef<typeof messageList>([])
 
   add = async l => {
     setMessageList(preList => [...preList, l])
@@ -56,11 +57,16 @@ function MessageContainer() {
     return l.id
   }
 
+  console.log(messageList)
+
   removeChild = async (id: string) => {
     await sleep(1500)
+    console.log('messageList', copyMessageListRef.current, id)
     const m = messageList.find(l => l.id === id)
+    console.log('mmmm', m)
+    if (!m) return
     setActiveIds(preActiveIds => preActiveIds.filter(i => i !== id))
-    await sleep(m!.duration || 500)
+    await sleep(m.duration || 500)
     setMessageList(preList => preList.filter(l => l.id !== id))
     return undefined
   }
@@ -71,6 +77,10 @@ function MessageContainer() {
   //     setMessageList(preList => preList.filter(l => l.id !== id))
   //   }
   // }, [messageList])
+
+  useEffect(() => {
+    copyMessageListRef.current = messageList
+  })
 
   return (
     <div className='fixed top-0 left-0 flex flex-col w-screen z-5000'>
