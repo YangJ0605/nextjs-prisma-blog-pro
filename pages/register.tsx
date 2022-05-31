@@ -14,7 +14,7 @@ const Login: NextPage = () => {
   }
 
   const getCode = () => {
-    $message.success('success')
+    $message.success('获取验证码成功')
     const { email } = formRef.current?.value as Record<string, string>
     if (!email) return
     // axios.get('/api/getCode').then(res => {})
@@ -47,7 +47,7 @@ const Login: NextPage = () => {
             >
               {label}
             </label>
-            <div className='flex justify-between items-center'>
+            <div className='flex items-center justify-between'>
               <input
                 required={required}
                 type={type}
@@ -70,7 +70,7 @@ const Login: NextPage = () => {
   ]
 
   return (
-    <div className='w-full h-full flex items-center justify-center'>
+    <div className='flex items-center justify-center w-full h-full'>
       <div className='w-full max-w-sm p-6 m-auto bg-white rounded-md shadow-md dark:bg-gray-800'>
         <h1 className='text-3xl font-semibold text-center text-gray-700 dark:text-white'>
           注册

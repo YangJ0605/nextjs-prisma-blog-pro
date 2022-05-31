@@ -19,3 +19,23 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.message-animation {
+  animation: messageShow var(--duration--) ease forwards;
+}
+@keyframes messageShow {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.message-animation-hidden {
+  animation: messagehidden var(--duration--) ease forwards;
+}
+@keyframes messagehidden {
+  to {
+    transform: translateY(-8rem);
+    opacity: 0;
+  }
+}
