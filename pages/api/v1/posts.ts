@@ -2,7 +2,8 @@ import { NextApiHandler } from 'next'
 import prisma from '../../../lib/prisma'
 
 const post: NextApiHandler = async (req, res) => {
-  if (req.method === 'POST') {
+  if (req.method === 'GET') {
+    const postsCount = await prisma.post.count()
     const posts = await prisma.post.findMany({
       select: {
         id: true,
@@ -10,6 +11,7 @@ const post: NextApiHandler = async (req, res) => {
         content: true,
         updatedAt: true,
         createdAt: true,
+        tags: true,
         author: {
           select: {
             id: true,
@@ -26,10 +28,20 @@ const post: NextApiHandler = async (req, res) => {
               }
             }
           }
+        },
+        _count: {
+          select: {
+            comment: true
+          }
         }
       }
     })
-    res.json(posts)
+
+    res.json({
+      code: 0,
+      posts,
+      total: postsCount
+    })
   } else {
     res.status(422).json({
       code: -1,

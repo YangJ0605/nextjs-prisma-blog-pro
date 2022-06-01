@@ -23,6 +23,7 @@ model Post {
   id        Int       @id @default(autoincrement())
   title     String    @default("") @db.VarChar(255)
   content   String    @default("")
+  tags      String[]
   authorId  Int?      @map("user_id")
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt DateTime  @default(now()) @updatedAt @map("updated_at")

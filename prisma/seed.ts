@@ -26,7 +26,8 @@ async function main() {
       data: {
         title: `${u.username}的文章`,
         content: `${u.username}的文章内容`,
-        authorId: user.id
+        authorId: user.id,
+        tags: ['javascript', 'typescript']
       }
     })
 

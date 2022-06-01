@@ -44,7 +44,7 @@ export default function Form({ formRef, fileds, onSubmit, submitText }: Props) {
         <div className='mt-6'>
           <button
             type='submit'
-            className='w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600'
+            className='w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80 focus:bg-gray-600'
           >
             {submitText}
           </button>

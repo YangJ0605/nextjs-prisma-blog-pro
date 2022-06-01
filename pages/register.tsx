@@ -108,7 +108,7 @@ const Login: NextPage = () => {
               <button
                 onClick={getCode}
                 type='button'
-                className='w-2/5 px-4 py-2 mt-2 tracking-wide text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600'
+                className='w-2/5 px-4 py-2 mt-2 tracking-wide text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600 focus:ring focus:ring-blue-300 focus:ring-opacity-80'
               >
                 获取验证码
               </button>
