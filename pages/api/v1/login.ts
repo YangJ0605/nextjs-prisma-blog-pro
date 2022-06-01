@@ -1,6 +1,8 @@
 import { NextApiHandler } from 'next'
 import prisma from '@/lib/prisma'
 import { emailRegexp, passwordRegexp } from '@/lib/regexp'
+import { withIronSessionApiRoute } from 'iron-session/next'
+import { sessionOptions } from '@/lib/session'
 
 const login: NextApiHandler = async (req, res) => {
   if (req.method === 'POST') {
@@ -61,4 +63,4 @@ const login: NextApiHandler = async (req, res) => {
   }
 }
 
-export default login
+export default withIronSessionApiRoute(login, sessionOptions)
