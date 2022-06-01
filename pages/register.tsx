@@ -14,8 +14,24 @@ const Login: NextPage = () => {
   const router = useRouter()
 
   const handleSubmit = async (v: Record<string, string | number>) => {
-    const { email, password, code } = v
+    const { email, password, code, password2 } = v
+    if (!emailRegexp.test(email as string)) {
+      $message.error('邮箱格式不正确')
+      return
+    }
+    if (!password) {
+      $message.error('密码不能为空')
+      return
+    }
+    if (!code) {
+      $message.error('验证码不能为空')
+      return
+    }
 
+    if (password !== password2) {
+      $message.error('两次密码不一致')
+      return
+    }
     const { data } = await axios.post('/api/v1/register', {
       username: email,
       password,
@@ -58,6 +74,12 @@ const Login: NextPage = () => {
     {
       label: '密码',
       name: 'password',
+      required: true,
+      type: 'password'
+    },
+    {
+      label: '确认密码',
+      name: 'password2',
       required: true,
       type: 'password'
     },

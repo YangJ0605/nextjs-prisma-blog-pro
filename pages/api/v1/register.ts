@@ -1,6 +1,7 @@
 import { NextApiHandler } from 'next'
 import { validateUser } from '../../../lib/validate/user'
 import prisma from '../../../lib/prisma'
+import redisClient from '@/lib/redis'
 
 const register: NextApiHandler = async (req, res) => {
   if (req.method === 'POST') {
@@ -9,7 +10,7 @@ const register: NextApiHandler = async (req, res) => {
       password: string
       code: string
     }
-    const oldCode = await redisClient?.get(username)
+    const oldCode = await redisClient.get(username)
     if (oldCode !== code) {
       res.json({
         code: -1,
