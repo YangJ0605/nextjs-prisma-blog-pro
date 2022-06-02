@@ -1,4 +1,5 @@
-import React from 'react'
+import { useRouter } from 'next/router'
+import React, { MouseEvent } from 'react'
 
 export type Post = {
   id: string
@@ -9,7 +10,21 @@ export type Post = {
   content: string
 }
 
-export default function PostItem({ time, title, tags, author, content }: Post) {
+export default function PostItem({
+  time,
+  title,
+  tags,
+  author,
+  content,
+  id
+}: Post) {
+  const router = useRouter()
+
+  const handleToDetail = (e: MouseEvent) => {
+    e.preventDefault()
+    router.push(`/post/${id}`)
+  }
+
   return (
     <div className='container max-w-4xl px-10 py-6 mx-auto rounded-lg shadow-sm dark:bg-gray-900 bg-gray-50 mb-[16px] last:mb-0'>
       <div className='flex items-center justify-between'>
@@ -28,7 +43,7 @@ export default function PostItem({ time, title, tags, author, content }: Post) {
       <div className='mt-3'>
         <a
           rel='noopener noreferrer'
-          href='#'
+          onClick={handleToDetail}
           className='text-2xl font-bold hover:underline'
         >
           {title}
@@ -38,7 +53,7 @@ export default function PostItem({ time, title, tags, author, content }: Post) {
       <div className='flex items-center justify-between mt-4'>
         <a
           rel='noopener noreferrer'
-          href='#'
+          onClick={handleToDetail}
           className='text-blue-600 hover:underline dark:text-blue-400'
         >
           查看更多

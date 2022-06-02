@@ -5,11 +5,17 @@ import React, { useEffect, useMemo, useState } from 'react'
 import DropDown, { DropdownOption } from '../DropDown'
 import MoonIcon from '../icon/MoonIcon'
 import SunIcon from '../icon/SunIcon'
+import { userAtom } from '@/lib/store/user'
+import { useAtom } from 'jotai'
+import { useRouter } from 'next/router'
+import axios from 'axios'
 
 const Header = () => {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const [navIsOpen, setNavIsOpen] = useState(false)
+  const [user, setUser] = useAtom(userAtom)
+  const router = useRouter()
 
   useEffect(() => {
     setMounted(true)
@@ -45,7 +51,22 @@ const Header = () => {
   )
 
   const onDropDownSelect = (key: string | number, option: DropdownOption) => {
-    console.log(key, option)
+    if (key === 'logout') {
+      axios.post('/api/v1/logout')
+      setUser({
+        id: '',
+        username: '',
+        login: false
+      })
+      router.replace('/')
+    }
+  }
+
+  const handleLogin = () => {
+    if (router.pathname === '/login') {
+      return
+    }
+    router.replace('/login?redirect=' + router.asPath)
   }
 
   return (
@@ -96,31 +117,41 @@ const Header = () => {
 
             <div className='flex items-center mt-4 md:mt-0'>
               {renderThemeChanger}
-              <DropDown
-                options={[
-                  {
-                    label: '退出登录',
-                    key: 'logout'
-                  }
-                ]}
-                onSelect={onDropDownSelect}
-              >
-                <button
-                  type='button'
-                  className='flex items-center focus:outline-none'
-                  aria-label='toggle profile dropdown'
+              {user.login ? (
+                <DropDown
+                  options={[
+                    {
+                      label: '退出登录',
+                      key: 'logout'
+                    }
+                  ]}
+                  onSelect={onDropDownSelect}
                 >
-                  <div className='w-8 h-8 overflow-hidden border-2 border-gray-400 rounded-full'>
-                    <Image
-                      src='/default.webp'
-                      className='object-cover w-full h-full'
-                      alt='avatar'
-                      width='100%'
-                      height='100%'
-                    />
-                  </div>
+                  <button
+                    type='button'
+                    className='flex items-center focus:outline-none'
+                    aria-label='toggle profile dropdown'
+                  >
+                    <div className='w-8 h-8 overflow-hidden border-2 border-gray-400 rounded-full'>
+                      <Image
+                        src='/default.webp'
+                        className='object-cover w-full h-full'
+                        alt='avatar'
+                        width='100%'
+                        height='100%'
+                      />
+                    </div>
+                  </button>
+                </DropDown>
+              ) : (
+                <button
+                  onClick={handleLogin}
+                  type='button'
+                  className='px-8 py-3 divide-x rounded bg-purple-600 text-gray-100 divide-gray-300 dark:bg-purple-400 dark:text-gray-800'
+                >
+                  登录
                 </button>
-              </DropDown>
+              )}
             </div>
           </div>
         </div>

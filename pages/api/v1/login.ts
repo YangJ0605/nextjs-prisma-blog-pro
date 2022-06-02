@@ -34,27 +34,41 @@ const login: NextApiHandler = async (req, res) => {
         msg: '密码不能为空'
       })
     }
-    const sqlUser = await prisma.user.findUnique({
-      where: {
-        username
+    try {
+      const sqlUser = await prisma.user.findUnique({
+        where: {
+          username
+        }
+      })
+      if (!sqlUser) {
+        return res.json({
+          code: -1,
+          msg: '该邮箱未注册'
+        })
       }
-    })
-    if (!sqlUser) {
-      return res.json({
+      if (sqlUser.password !== password) {
+        return res.json({
+          code: -1,
+          msg: '密码不匹配'
+        })
+      }
+      req.session.user = {
+        id: sqlUser.id,
+        username: sqlUser.username,
+        login: true
+      }
+      await req.session.save()
+      res.json({
+        code: 0,
+        msg: '登录成功',
+        userId: sqlUser.id
+      })
+    } catch (error) {
+      res.status(500).json({
         code: -1,
-        msg: '该邮箱未注册'
+        msg: '服务器错误'
       })
     }
-    if (sqlUser.password !== password) {
-      return res.json({
-        code: -1,
-        msg: '密码不匹配'
-      })
-    }
-    res.json({
-      code: 0,
-      msg: '登录成功'
-    })
   } else {
     res.status(422).json({
       code: -1,

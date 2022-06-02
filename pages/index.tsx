@@ -3,6 +3,8 @@ import PostItem, { Post } from '@/components/PostItem'
 import axios from 'axios'
 import type { GetServerSideProps, NextPage } from 'next'
 import dayjs from 'dayjs'
+import { withIronSessionSsr } from 'iron-session/next'
+import { sessionOptions } from '@/lib/session'
 
 type IPost = {
   id: string
@@ -36,25 +38,35 @@ const Home: NextPage<{ posts: Post[]; total: number }> = ({ posts }) => {
 
 export default Home
 
-export const getServerSideProps: GetServerSideProps = async ctx => {
-  async function getPosts() {
-    const { data } = await axios.get('http://localhost:3000/api/v1/posts')
-    const { posts, total } = data as { posts: IPost[]; total: number }
-    const postsData = posts.map(post => ({
-      id: post.id,
-      title: post.title,
-      time: dayjs(post.createdAt).format('YYYY-MM-DD HH:mm'),
-      tags: post.tags,
-      author: post.author.username,
-      content: post.content
-    }))
-    return { postsData, total }
-  }
-  const { postsData, total } = await getPosts()
-  return {
-    props: {
-      posts: postsData,
-      total
+export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
+  async ctx => {
+    async function getPosts() {
+      const { data } = await axios.get(
+        `http://${ctx.req.headers.host}/api/v1/posts`
+      )
+      const { posts, total } = data as { posts: IPost[]; total: number }
+      const postsData = posts.map(post => ({
+        id: post.id,
+        title: post.title,
+        time: dayjs(post.createdAt).format('YYYY-MM-DD HH:mm'),
+        tags: post.tags,
+        author: post.author.username,
+        content: post.content
+      }))
+      return { postsData, total }
     }
-  }
-}
+    const { postsData, total } = await getPosts()
+    const user = ctx.req.session.user || null
+    if (user && user.id) {
+      user.login = true
+    }
+    return {
+      props: {
+        posts: postsData,
+        total,
+        initialStoreState: user
+      }
+    }
+  },
+  sessionOptions
+)

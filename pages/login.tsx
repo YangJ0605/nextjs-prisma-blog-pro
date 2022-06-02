@@ -2,13 +2,20 @@ import Form from '@/components/Form'
 import { FiledItem } from '@/components/Form/FormItem'
 import $message from '@/components/message'
 import { emailRegexp, passwordRegexp } from '@/lib/regexp'
+import { userAtom } from '@/lib/store/user'
 import axios from 'axios'
-import type { NextPage } from 'next'
+import { useSetAtom } from 'jotai'
+import type { GetServerSideProps, NextPage } from 'next'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React, { useRef } from 'react'
+import { withIronSessionSsr } from 'iron-session/next'
+import { sessionOptions } from '@/lib/session'
 
 const Login: NextPage = () => {
   const formRef = useRef<HTMLFormElement>(null)
+  const router = useRouter()
+  const setUser = useSetAtom(userAtom)
 
   const handleSubmit = async (v: Record<string, string | number>) => {
     const { email, password } = v
@@ -36,6 +43,12 @@ const Login: NextPage = () => {
     })
     if (data.code === 0) {
       $message.success('登录成功!')
+      router.replace((router.query.redirect as string) || '/')
+      setUser({
+        id: data.userId,
+        username: email as string,
+        login: true
+      })
     } else {
       $message.error(data.msg)
     }
@@ -84,3 +97,28 @@ const Login: NextPage = () => {
 }
 
 export default Login
+
+export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
+  async ctx => {
+    const user = ctx.req.session.user || null
+    if (user && user.id) {
+      console.log('cccccc')
+      user.login = true
+      return {
+        props: {
+          initialStoreState: user
+        },
+        redirect: {
+          permanent: false,
+          destination: ctx.query?.redirect || '/'
+        }
+      }
+    }
+    return {
+      props: {
+        initialStoreState: user
+      }
+    }
+  },
+  sessionOptions
+)
